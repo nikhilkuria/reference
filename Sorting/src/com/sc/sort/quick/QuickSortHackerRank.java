@@ -11,49 +11,54 @@ public class QuickSortHackerRank {
 		for (int i = 0; i < n; i++) {
 			input[i] = in.nextInt();
 		}
-		sort(input, 0, input.length - 1);
+		sort(input,0,input.length-1);
 
 		in.close();
 	}
 
-	private static void sort(int[] input, int low, int high) {
-		if (high <= low) {
+	private static void sort(int[] input,int lowPointer,int pivotCandidateIndex) {
+		if(lowPointer>=pivotCandidateIndex){
 			return;
 		}
-		int pivotElement = partition(input, low, high);
-		sort(input, low, pivotElement - 1);
-		sort(input, pivotElement + 1, high);
+			int pivotIndex = partition(input,lowPointer,pivotCandidateIndex);
+			sort(input,lowPointer,pivotIndex-1);
+			sort(input,pivotIndex+1,pivotCandidateIndex);
+
 	}
 
-	private static int partition(int[] input, int low, int high) {
-		int leftIndex = low-1;
-		int rightIndex = high;
-		while (true) {
-
-			// Move left Index towards right
-			while (input[++leftIndex] < input[high]) {
-				if (leftIndex == high) {
+	private static int partition(int[] input, int lowPointer,
+			int pivotCandidateIndex) {
+		int lowIndex = lowPointer-1;
+		int highIndex = lowPointer-1;
+		
+		while(true){
+			
+			while(input[++highIndex]<input[pivotCandidateIndex]){
+				if(highIndex==pivotCandidateIndex){
 					break;
 				}
 			}
-
-			// Move right Index towards left
-			while (input[--rightIndex] > input[high]) {
-				if (rightIndex == low) {
-					break;
-				}
-			}
-
-			if (leftIndex >= rightIndex) {
+			
+			if((lowIndex==pivotCandidateIndex) || (highIndex==pivotCandidateIndex)){
 				break;
 			}
-
-			exch(input, leftIndex, rightIndex);
+			lowIndex=highIndex;
+			while(input[++lowIndex]>input[pivotCandidateIndex]){
+				if(lowIndex==pivotCandidateIndex){
+					break;
+				}
+			}
+			
+			if((lowIndex==pivotCandidateIndex) || (highIndex==pivotCandidateIndex)){
+				break;
+			}
+			
+			exch(input, highIndex, lowIndex);
 		}
-		exch(input, high, leftIndex);
-		printArray(input);
 
-		return leftIndex;
+		exch(input,highIndex,pivotCandidateIndex);
+		printArray(input);
+		return highIndex;
 	}
 
 	private static void exch(int[] input, int from, int to) {
